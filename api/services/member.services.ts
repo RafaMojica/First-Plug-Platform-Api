@@ -41,12 +41,12 @@ export class MembersServices {
         throw new Error("Member not found");
       }
 
-      const productsToDelete = await ProductServices.getAllProductsByIds(
+      const productsToDelete = await ProductServices.getAllByIds(
         productsIds,
         session
       );
 
-      await ProductServices.getAllProductsByIdsAndDelete(productsIds, session);
+      await ProductServices.deleteMany(productsIds, session);
 
       member.products.push(...productsToDelete);
 
