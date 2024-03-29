@@ -17,6 +17,7 @@ export const MemberSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  // TODO: when saving the member within order and shipments, it throws an error about the unique email. possible use of populate?
   email: {
     type: String,
     required: true,

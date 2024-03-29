@@ -3,6 +3,7 @@ import { isISODate } from "../utils";
 import { z } from "zod";
 
 export const ShipmentValidation = z.object({
+  // TODO: this validation is done so that bulk create receives the first and last name of the member and inserts its document.
   member: z.string().min(1),
   date: z
     .string()
