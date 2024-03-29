@@ -4,11 +4,11 @@ import { CreationProduct, Product, ProductSchema } from "../types";
 import { ClientSession, Types } from "mongoose";
 
 export class ProductServices {
-  static async findAllProducts() {
+  static async getAll() {
     return await ProductRepository.find();
   }
 
-  static async findProductsById(productId: ProductSchema["_id"]) {
+  static async getById(productId: ProductSchema["_id"]) {
     try {
       return await ProductRepository.findById(productId);
     } catch (error) {
@@ -16,7 +16,7 @@ export class ProductServices {
     }
   }
 
-  static async updateOneProduct({
+  static async update({
     id,
     data,
   }: {
@@ -32,7 +32,7 @@ export class ProductServices {
     }
   }
 
-  static async createNewProduct(data: CreationProduct) {
+  static async create(data: CreationProduct) {
     return await ProductRepository.create(data);
   }
 
@@ -41,7 +41,7 @@ export class ProductServices {
     return (await ProductRepository.insertMany(data)).length;
   }
 
-  static async deleteProductById(productId: ProductSchema["_id"]) {
+  static async delete(productId: ProductSchema["_id"]) {
     return await ProductRepository.findOneAndRemove({ productId });
   }
 
