@@ -3,8 +3,9 @@ export const ordersRoutes = express.Router();
 
 import { OrderController } from "../controllers";
 
-ordersRoutes.get("/", OrderController.getOrders);
-ordersRoutes.get("/:id", OrderController.getOrderById);
-ordersRoutes.post("/", OrderController.newOrder);
-ordersRoutes.put("/:id", OrderController.updateOrder);
-ordersRoutes.delete("/:id", OrderController.deleteOrder);
+ordersRoutes.get("/", OrderController.getAll);
+ordersRoutes.get("/:id", OrderController.getById);
+ordersRoutes.post("/", OrderController.create);
+ordersRoutes.post("/bulkcreate", OrderController.bulkCreate);
+ordersRoutes.put("/:id", OrderController.update);
+ordersRoutes.delete("/:id", OrderController.delete);

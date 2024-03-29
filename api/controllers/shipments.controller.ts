@@ -1,19 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import { createMockShipment } from "../mocks/datamocks";
 import { MainService } from "../services";
 export class ShipmentsController {
-  static async getShipments(req: Request, res: Response, next: NextFunction) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const mockShipments = Array.from({ length: 10 }).map((_, i) =>
-        createMockShipment()
-      );
-      res.status(200).json(mockShipments);
+      const mainService = new MainService();
+
+      await mainService.initalize(req.user._id);
+
+      const shipments = await mainService.runCommand("shipment", "getAll", {});
+
+      res.status(200).json(shipments);
     } catch (error) {
       next(error);
     }
   }
 
-  static async getOneShipment(req: Request, res: Response, next: NextFunction) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 
@@ -21,18 +23,14 @@ export class ShipmentsController {
 
       await mainService.initalize(req.user._id);
 
-      const shipment = await mainService.runCommand(
-        "shipment",
-        "getOneShipment",
-        id
-      );
+      const shipment = await mainService.runCommand("shipment", "getById", id);
 
       res.status(200).json(shipment);
     } catch (error) {
       next(error);
     }
   }
-  static async createShipment(req: Request, res: Response, next: NextFunction) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const mainService = new MainService();
 
@@ -40,7 +38,7 @@ export class ShipmentsController {
 
       const newShipment = await mainService.runCommand(
         "shipment",
-        "createShipment",
+        "create",
         req.body
       );
 
@@ -49,7 +47,26 @@ export class ShipmentsController {
       next(error);
     }
   }
-  static async updateShipment(req: Request, res: Response, next: NextFunction) {
+  static async bulkCreate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const mainService = new MainService();
+
+      await mainService.initalize(req.user._id);
+
+      const rowsCreated = await mainService.runCommand(
+        "shipment",
+        "bulkCreate",
+        req.body
+      );
+
+      res.status(201).json({
+        message: `Bulk create successful: ${rowsCreated} documents inserted successfully out of ${req.body.length}.`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 
@@ -59,7 +76,7 @@ export class ShipmentsController {
 
       const shipmentUpdated = await mainService.runCommand(
         "shipment",
-        "updateShipment",
+        "update",
         { id, data: req.body }
       );
 
@@ -68,7 +85,7 @@ export class ShipmentsController {
       next(error);
     }
   }
-  static async deleteShipment(req: Request, res: Response, next: NextFunction) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 
@@ -78,7 +95,7 @@ export class ShipmentsController {
 
       const shipmentDeleted = await mainService.runCommand(
         "shipment",
-        "deleteShipment",
+        "delete",
         id
       );
 

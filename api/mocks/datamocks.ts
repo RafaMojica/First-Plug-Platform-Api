@@ -1,6 +1,15 @@
 import { faker } from "@faker-js/faker";
-import { Order, Shipment, User, ProductSchema, MemberSchema } from "../types";
-import { Document, Types } from "mongoose";
+import {
+  User,
+  ProductSchema,
+  MemberSchema,
+  OrderSchema,
+  ShipmentSchema,
+  PRODUCT_STATUSES,
+  ORDER_STATUSES,
+  SHIPMENT_STATUS,
+} from "../types";
+import { Document } from "mongoose";
 
 export const createMockMember = (teamCount: number = 2): MemberSchema => {
   return {
@@ -11,6 +20,7 @@ export const createMockMember = (teamCount: number = 2): MemberSchema => {
     phone: faker.phone.number(),
     email: faker.internet.email(),
     jobPosition: faker.person.jobTitle(),
+    country: faker.location.country(),
     city: faker.location.city(),
     dni: faker.person.suffix(),
     zipCode: faker.location.zipCode(),
@@ -67,7 +77,7 @@ export const createMockProduct = (): ProductSchema => {
       max: 10,
     })}GB`,
     serialNumber: faker.string.uuid(),
-    status: faker.helpers.arrayElement(["Available", "Delivered"]),
+    status: faker.helpers.arrayElement(PRODUCT_STATUSES),
     imgUrl: faker.image.url(),
     stock: faker.number.int({ min: 0, max: 100 }),
     __v: faker.number.int(),
@@ -77,40 +87,27 @@ export const createMockProduct = (): ProductSchema => {
 export const createMockOrder = (
   memberCount: number = 2,
   productCount: number = 2
-): Order => {
+): OrderSchema => {
   return {
     _id: faker.string.uuid(),
-    members: Array.from({ length: memberCount }, createMockMember),
-    status: faker.helpers.arrayElement([
-      "Confirmed",
-      "Canceled",
-      "ConfirmationPending",
-      "PaymentPending",
-    ]),
+    member: faker.person.fullName(),
+    status: faker.helpers.arrayElement(ORDER_STATUSES),
     date: faker.date.anytime().toISOString(),
-    products: Array.from({ length: productCount }, createMockProduct),
+    total: faker.commerce.price(),
     __v: faker.number.int(),
   };
 };
 
-export const createMockShipment = (productCount: number = 2): Shipment => {
+export const createMockShipment = (): ShipmentSchema => {
   return {
     _id: faker.string.uuid(),
-    memberId: faker.string.uuid(),
-    name: faker.person.firstName(),
-    lastName: faker.person.lastName(),
+    member: faker.person.firstName(),
     date: faker.date.recent().toISOString(),
-    status: faker.helpers.arrayElement([
-      "Missing Data",
-      "Delivered",
-      "Preparing",
-      "Available",
-      "Shipped",
-    ]),
+    status: faker.helpers.arrayElement(SHIPMENT_STATUS),
     type: faker.helpers.arrayElement(["Courrier", "Internal"]),
     trackingNumber: faker.string.numeric(),
     trackingURL: faker.internet.url(),
-    products: Array.from({ length: productCount }, createMockProduct),
+    price: faker.commerce.price(),
     __v: faker.number.int(),
   };
 };

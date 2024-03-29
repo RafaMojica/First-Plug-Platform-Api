@@ -1,3 +1,4 @@
+import { PRODUCT_STATUSES } from "../types";
 import { z } from "zod";
 
 export const ProductValidation = z.object({
@@ -12,7 +13,7 @@ export const ProductValidation = z.object({
   storage: z.string().nullable(),
   gpu: z.string().nullable(),
   serialNumber: z.string().nullable(),
-  status: z.enum(["Available", "Delivered"]),
+  status: z.enum(PRODUCT_STATUSES),
   imgUrl: z.string().optional(),
   stock: z.number(),
 });

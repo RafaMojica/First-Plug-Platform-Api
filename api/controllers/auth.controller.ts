@@ -53,4 +53,21 @@ export class AuthController {
       next(error);
     }
   }
+
+  static async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const mainService = new MainService();
+
+      await mainService.initalize();
+
+      await mainService.runCommand("auth", "changePassword", {
+        userId: req.user._id,
+        newPassword: req.body.password,
+      });
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  }
 }

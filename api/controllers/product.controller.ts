@@ -1,20 +1,22 @@
 import { Request, Response, NextFunction } from "express";
-import { createMockProduct } from "../mocks/datamocks";
 import { MainService } from "../services";
 
 export class ProductController {
-  static async getAllProducts(req: Request, res: Response, next: NextFunction) {
+  static async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const mockProducts = Array.from({ length: 10 }).map((_, i) =>
-        createMockProduct()
-      );
-      res.status(200).json(mockProducts);
+      const mainService = new MainService();
+
+      await mainService.initalize(req.user._id);
+
+      const products = await mainService.runCommand("product", "getAll", {});
+
+      res.status(200).json(products);
     } catch (error) {
       next(error);
     }
   }
 
-  static async getProductById(req: Request, res: Response, next: NextFunction) {
+  static async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 
@@ -22,11 +24,7 @@ export class ProductController {
 
       await mainService.initalize(req.user._id);
 
-      const product = await mainService.runCommand(
-        "product",
-        "findProductsById",
-        id
-      );
+      const product = await mainService.runCommand("product", "getById", id);
 
       res.status(200).json(product);
     } catch (error) {
@@ -34,7 +32,7 @@ export class ProductController {
     }
   }
 
-  static async updateProduct(req: Request, res: Response, next: NextFunction) {
+  static async update(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 
@@ -42,7 +40,7 @@ export class ProductController {
 
       await mainService.initalize(req.user._id);
 
-      await mainService.runCommand("product", "updateOneProduct", {
+      await mainService.runCommand("product", "update", {
         id,
         data: req.body,
       });
@@ -53,7 +51,7 @@ export class ProductController {
     }
   }
 
-  static async createProduct(req: Request, res: Response, next: NextFunction) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const mainService = new MainService();
 
@@ -61,7 +59,7 @@ export class ProductController {
 
       const newProduct = await mainService.runCommand(
         "product",
-        "createNewProduct",
+        "create",
         req.body
       );
       res.status(201).json(newProduct);
@@ -90,7 +88,7 @@ export class ProductController {
     }
   }
 
-  static async deleteProduct(req: Request, res: Response, next: NextFunction) {
+  static async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const mainService = new MainService();
@@ -99,7 +97,7 @@ export class ProductController {
 
       const deleteProduct = await mainService.runCommand(
         "product",
-        "deleteProductById",
+        "delete",
         id
       );
 

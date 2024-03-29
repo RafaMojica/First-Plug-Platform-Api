@@ -1,3 +1,4 @@
+import { PRODUCT_STATUSES } from "../types";
 import mongoose from "mongoose";
 
 const ProductsSchema = new mongoose.Schema({
@@ -55,7 +56,7 @@ const ProductsSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Available", "Delivered"],
+    enum: PRODUCT_STATUSES,
     require: true,
   },
   imgUrl: {

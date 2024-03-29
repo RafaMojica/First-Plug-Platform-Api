@@ -1,22 +1,24 @@
-import { Member } from "./member";
-import { Product } from "./product";
+import z from "zod";
+import { OrderValidation } from "../validations";
 
-export type Order = {
+export type Order = z.infer<typeof OrderValidation>;
+
+export type OrderSchema = {
   _id: string;
-  members: Member[];
+  member: string;
   status: OrderStatus;
   date: string;
-  products: Product[];
+  total: string;
   __v: number;
 };
 
 export const ORDER_STATUSES = [
-  "Confirmed",
-  "Canceled",
-  "ConfirmationPending",
-  "PaymentPending",
+  "Order confirmed",
+  "Order canceled",
+  "Confirmation pending",
+  "Payment pending",
 ] as const;
 
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
-export type CreationOrder = Omit<Order, "_id" | "__v">;
+export type CreationOrder = Omit<OrderSchema, "_id" | "__v">;

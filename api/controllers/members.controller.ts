@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { MainService } from "../services";
-import { Member } from "../types";
 
 export class MembersController {
   static async getAll(req: Request, res: Response, next: NextFunction) {
@@ -46,6 +45,29 @@ export class MembersController {
       );
 
       res.status(201).json(newMember);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async assignManyProductsToMember(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { productsIds, memberId } = req.body;
+
+      const mainService = new MainService();
+
+      await mainService.initalize(req.user._id);
+
+      await mainService.runCommand("member", "assignManyProductsToMember", {
+        productsIds,
+        memberId,
+      });
+
+      res.status(201).send();
     } catch (error) {
       next(error);
     }

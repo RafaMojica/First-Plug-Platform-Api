@@ -1,4 +1,5 @@
-import { Product } from ".";
+import z from "zod";
+import { ShipmentValidation } from "../validations";
 
 export const SHIPMENT_STATUS = [
   "Missing Data",
@@ -14,17 +15,10 @@ export const SHIPMENT_TYPE = ["Courrier", "Internal"] as const;
 
 export type ShipmentType = (typeof SHIPMENT_TYPE)[number];
 
-export type Shipment = {
+export type Shipment = z.infer<typeof ShipmentValidation>;
+
+export type ShipmentSchema = Shipment & {
   _id: string;
-  memberId: string;
-  name: string;
-  lastName: string;
-  date: string;
-  status: ShipmentStatus;
-  type: ShipmentType;
-  trackingNumber: string;
-  trackingURL: string;
-  products: Product[];
   __v: number;
 };
 
