@@ -45,11 +45,13 @@ export class ProductServices {
     return await ProductRepository.findOneAndRemove({ productId });
   }
 
-  static async getAllProductsByIds(
+  static async getAllByIds(
     productIds: ProductSchema["_id"][],
     session?: ClientSession
   ) {
-    let query = ProductRepository.find({ _id: { $in: productIds } });
+    const uniqueProductIds = [...new Set(productIds)];
+
+    let query = ProductRepository.find({ _id: { $in: uniqueProductIds } });
 
     if (session) {
       query = query.session(session);
@@ -61,7 +63,7 @@ export class ProductServices {
       throw new Error(`No products found for the provided IDs`);
     }
 
-    if (products.length !== productIds.length) {
+    if (products.length !== uniqueProductIds.length) {
       const foundProductIds = products.map((product) => product._id);
 
       const notFoundProductIds = productIds.filter((productId) => {
@@ -77,7 +79,7 @@ export class ProductServices {
     return products;
   }
 
-  static async getAllProductsByIdsAndDelete(
+  static async deleteMany(
     productIdsToDelete: ProductSchema["_id"][],
     session?: ClientSession
   ) {
