@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MemberSchema = new mongoose.Schema({
+export const MemberSchema = new mongoose.Schema({
   firstName: {
     type: String,
     require: true,
@@ -17,10 +17,11 @@ const MemberSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  // TODO: when saving the member within order and shipments, it throws an error about the unique email. possible use of populate?
   email: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
     match: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/,
   },
   dni: {
@@ -28,6 +29,10 @@ const MemberSchema = new mongoose.Schema({
     require: true,
   },
   jobPosition: {
+    type: String,
+    require: true,
+  },
+  country: {
     type: String,
     require: true,
   },
@@ -61,6 +66,11 @@ const MemberSchema = new mongoose.Schema({
     default: "",
   },
   teams: {
+    type: Array,
+    require: false,
+    default: [],
+  },
+  products: {
     type: Array,
     require: false,
     default: [],

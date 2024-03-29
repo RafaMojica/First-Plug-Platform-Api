@@ -20,4 +20,8 @@ export class UserService {
 
     await UserRepository.create(dto);
   }
+
+  static async update(userId: string, data: Partial<User>) {
+    return UserRepository.findByIdAndUpdate(userId, data);
+  }
 }

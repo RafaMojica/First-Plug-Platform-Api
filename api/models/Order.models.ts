@@ -1,10 +1,11 @@
-import { ORDER_STATUSES } from "../types";
 import mongoose from "mongoose";
+import { ORDER_STATUSES } from "../types";
+import { MemberSchema } from "./Member.models";
 
 const OrdersSchema = new mongoose.Schema(
   {
     member: {
-      type: String,
+      type: MemberSchema,
       required: true,
     },
     status: {

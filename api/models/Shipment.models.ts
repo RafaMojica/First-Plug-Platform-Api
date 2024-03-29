@@ -1,10 +1,11 @@
-import { SHIPMENT_STATUS, SHIPMENT_TYPE } from "../types";
 import mongoose from "mongoose";
+import { SHIPMENT_STATUS, SHIPMENT_TYPE } from "../types";
+import { MemberSchema } from "./Member.models";
 
 const ShipmentSchema = new mongoose.Schema(
   {
     member: {
-      type: String,
+      type: MemberSchema,
       required: true,
     },
     date: {
