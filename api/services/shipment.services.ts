@@ -49,7 +49,7 @@ export class ShipmentServices {
     });
 
     const validShipments = shipmentsWithMembers.filter(
-      (shipment) => shipment.member !== null
+      (shipment) => !!shipment.member
     );
 
     const insertedShipments = await ShipmentRepository.insertMany(

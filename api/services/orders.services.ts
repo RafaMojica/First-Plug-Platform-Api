@@ -41,7 +41,7 @@ export class OrderServices {
       return { ...order, member: member || null };
     });
 
-    const validOrders = ordersWithMembers.filter(Boolean);
+    const validOrders = ordersWithMembers.filter((order) => !!order.member);
 
     const insertedOrders = await OrderRepository.insertMany(validOrders);
 
